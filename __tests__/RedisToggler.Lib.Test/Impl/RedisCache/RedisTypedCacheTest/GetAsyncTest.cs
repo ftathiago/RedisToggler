@@ -105,7 +105,8 @@ public class GetAsyncTest : RedisTypedCacheBaseTest
 
         // Then
         await act.Should().NotThrowAsync<RedisException>();
-        Logger.Verify(l =>
+        Logger.Verify(
+            l =>
             l.Log(
                 It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
                 It.Is<EventId>(eventId => eventId.Id == 0),

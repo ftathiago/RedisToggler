@@ -28,7 +28,6 @@ public class SetAsyncTest : MemoryCacheBaseTest
             Times.Once);
     }
 
-
     [Fact]
     public async Task Should_NotRethrowException_When_MemoryThrowsOneAsync()
     {

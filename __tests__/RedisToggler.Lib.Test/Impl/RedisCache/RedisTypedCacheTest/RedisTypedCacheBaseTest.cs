@@ -7,7 +7,7 @@ namespace RedisToggler.Lib.Test.Impl.RedisCache.RedisTypedCacheTest;
 
 public abstract class RedisTypedCacheBaseTest : IDisposable
 {
-    public RedisTypedCacheBaseTest()
+    protected RedisTypedCacheBaseTest()
     {
         CacheMonitor.UpdateCache(true);
     }
@@ -19,7 +19,7 @@ public abstract class RedisTypedCacheBaseTest : IDisposable
         CacheSlidingDurationInMinutes = 2,
     };
 
-    public CancellationToken CancellationToken { get; } = new CancellationToken();
+    public CancellationToken CancellationToken { get; } = CancellationToken.None;
 
     public Mock<IDistributedCache> DistributedCache { get; } = new Mock<IDistributedCache>();
 

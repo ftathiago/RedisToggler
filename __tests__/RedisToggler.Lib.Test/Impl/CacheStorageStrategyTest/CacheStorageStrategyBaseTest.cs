@@ -8,10 +8,10 @@ namespace RedisToggler.Lib.Test.Impl.CacheStorageStrategyTest;
 
 public class CacheStorageStrategyBaseTest
 {
-    internal readonly Mock<IRedisTypedCache> _redis = new();
-    internal readonly Mock<IMemoryTypedCache> _memory = new();
-    internal readonly Mock<INoCache> _noCache = new();
-    internal readonly CacheMonitor _monitor = new();
+    private readonly Mock<IRedisTypedCache> _redis = new();
+    private readonly Mock<IMemoryTypedCache> _memory = new();
+    private readonly Mock<INoCache> _noCache = new();
+    private readonly CacheMonitor _monitor = new();
 
     [Fact]
     public void Should_ReturnRedisHandler_When_ConfigurationRequiresRedis()

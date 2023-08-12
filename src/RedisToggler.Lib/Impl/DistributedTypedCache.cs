@@ -2,6 +2,14 @@ using RedisToggler.Lib.Abstractions;
 
 namespace RedisToggler.Lib.Impl;
 
+/// <summary>
+/// Instance that implements cache gathering.
+/// </summary>
+/// <typeparam name="TEntryConfig">What configuration should be
+/// used for this cache object. Store as a Singleton.
+/// <remarks>If all objects should be stored with the same configuration,
+/// you can use the base CacheEntryConfiguration type.</remarks>
+/// </typeparam>
 public sealed class DistributedTypedCache<TEntryConfig> : IDistributedTypedCache<TEntryConfig>
     where TEntryConfig : CacheEntryConfiguration
 {

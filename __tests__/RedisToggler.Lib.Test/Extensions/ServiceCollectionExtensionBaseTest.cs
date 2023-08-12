@@ -14,7 +14,7 @@ public class ServiceCollectionExtensionBaseTest
         var service = new ServiceCollection();
 
         // When
-        service.AddRedisCache();
+        service.AddCacheWrapper(opt => opt.ConnectionString = string.Empty);
 
         // Then
         service.Should().Contain(descriptor => descriptor.ServiceType == typeof(IConnectionMultiplexer));
@@ -25,7 +25,7 @@ public class ServiceCollectionExtensionBaseTest
     {
         // Given
         var service = new ServiceCollection()
-            .AddRedisCache();
+            .AddCacheWrapper(opt => opt.ConnectionString = string.Empty);
         var provider = service.BuildServiceProvider();
 
         // When

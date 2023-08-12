@@ -36,8 +36,6 @@ public class RemoveAsyncTest : RedisTypedCacheBaseTest
         await act.Should().NotThrowAsync<OperationCanceledException>();
     }
 
-
-
     [Fact]
     public async Task Should_NotThrowException_When_RedisThrowsOneAsync()
     {
@@ -57,7 +55,8 @@ public class RemoveAsyncTest : RedisTypedCacheBaseTest
 
         // Then
         await act.Should().NotThrowAsync();
-        Logger.Verify(l =>
+        Logger.Verify(
+            l =>
             l.Log(
                 It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
                 It.Is<EventId>(eventId => eventId.Id == 0),

@@ -20,7 +20,7 @@ internal static class CacheMessages
     public const string NoCacheRemove =
         "Could not remove object with key {key} because cache is not working.";
 
-    public static EventId NoCacheEventId = new EventId(
+    public static readonly EventId NoCacheEventId = new EventId(
         id: 11082023,
         name: $"{Assembly.GetEntryAssembly()?.GetName().Name}fff67b92-465b-441f-ba80-ffee2e1dde2e");
 }

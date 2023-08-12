@@ -67,7 +67,6 @@ internal class RedisTypedCache : IRedisTypedCache
                 message: CacheMessages.CacheRemoveError,
                 args: nameof(RedisTypedCache),
                 exception: ex);
-            return;
         }
     }
 

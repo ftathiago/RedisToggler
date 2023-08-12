@@ -45,7 +45,8 @@ internal class NoTypedCache : INoCache
         _logger.LogWarning(
             eventId: CacheMessages.NoCacheEventId,
             message: CacheMessages.NoCacheStore,
-            value, key);
+            value,
+            key);
         return Task.CompletedTask;
     }
 }

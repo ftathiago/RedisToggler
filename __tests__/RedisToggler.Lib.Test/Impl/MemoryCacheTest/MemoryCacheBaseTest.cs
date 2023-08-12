@@ -7,10 +7,11 @@ namespace RedisToggler.Lib.Test.Impl.MemoryCacheTest;
 
 public class MemoryCacheBaseTest : IDisposable
 {
-    public CancellationToken CancellationToken { get; } = new CancellationToken();
+    public CancellationToken CancellationToken { get; } = CancellationToken.None;
+
     public Mock<IMemoryCache> MemoryCache { get; } = new Mock<IMemoryCache>(MockBehavior.Strict);
+
     public Mock<ICacheEntry> CacheEntry { get; } = new Mock<ICacheEntry>(MockBehavior.Loose);
-    internal Mock<ILogger<MemoryTypedCache>> Logger { get; } = new(MockBehavior.Loose);
 
     public CacheEntryConfiguration EntryConfiguration { get; } = new CacheEntryConfiguration()
     {
@@ -18,6 +19,8 @@ public class MemoryCacheBaseTest : IDisposable
         CacheDurationInMinutes = 5,
         CacheSlidingDurationInMinutes = 2,
     };
+
+    internal Mock<ILogger<MemoryTypedCache>> Logger { get; } = new(MockBehavior.Loose);
 
     public void Dispose()
     {

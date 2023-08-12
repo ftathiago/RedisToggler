@@ -13,7 +13,7 @@ public class NoCacheBaseTest : IDisposable
         CacheSlidingDurationInMinutes = 2,
     };
 
-    public CancellationToken CancellationToken { get; } = new CancellationToken();
+    public CancellationToken CancellationToken { get; } = CancellationToken.None;
 
     internal Mock<ILogger<NoTypedCache>> Logger { get; } = new(MockBehavior.Loose);
 
@@ -37,7 +37,8 @@ public class NoCacheBaseTest : IDisposable
         await cache.SetAsync(key, cacheObject, EntryConfiguration, CancellationToken);
 
         // Then
-        Logger.Verify(l =>
+        Logger.Verify(
+            l =>
             l.Log(
                 It.Is<LogLevel>(logLevel => logLevel == LogLevel.Warning),
                 It.Is<EventId>(eventId => eventId == CacheMessages.NoCacheEventId),
@@ -68,7 +69,8 @@ public class NoCacheBaseTest : IDisposable
         await cache.GetAsync(key, mockMethod.Object, CancellationToken);
 
         // Then
-        Logger.Verify(l =>
+        Logger.Verify(
+            l =>
             l.Log(
                 It.Is<LogLevel>(logLevel => logLevel == LogLevel.Warning),
                 It.Is<EventId>(eventId => eventId == CacheMessages.NoCacheEventId),
@@ -93,7 +95,8 @@ public class NoCacheBaseTest : IDisposable
         await cache.RemoveAsync(key, CancellationToken);
 
         // Then
-        Logger.Verify(l =>
+        Logger.Verify(
+            l =>
             l.Log(
                 It.Is<LogLevel>(logLevel => logLevel == LogLevel.Warning),
                 It.Is<EventId>(eventId => eventId == CacheMessages.NoCacheEventId),

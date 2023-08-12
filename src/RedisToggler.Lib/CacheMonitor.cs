@@ -11,7 +11,6 @@ internal class CacheMonitor
 
     public bool Active => _active;
 
-
     /// <summary>
     /// Update cache status, setting according with `active` parameter.
     /// </summary>

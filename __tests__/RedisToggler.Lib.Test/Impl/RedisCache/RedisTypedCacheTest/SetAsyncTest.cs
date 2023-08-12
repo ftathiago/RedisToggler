@@ -30,7 +30,6 @@ public class SetAsyncTest : RedisTypedCacheBaseTest
             Times.Once);
     }
 
-
     [Fact]
     public async Task Should_NotRethrowException_When_RedisThrowsOneAsync()
     {
@@ -59,10 +58,7 @@ public class SetAsyncTest : RedisTypedCacheBaseTest
     public async Task Should_ConfigureDistributedCacheEntryOptions_When_EntryConfigurationIsSpecifiedAsync()
     {
         // Given
-        var nonExpireBefore = DateTimeOffset.Now.Add(EntryConfiguration.CacheDuration);
         var storedObject = new SerializableObject { Property = "Teste" };
-        var serializedObject = UTF8Encoding.UTF8.GetBytes(
-            JsonSerializer.Serialize(storedObject));
         var key = Guid.NewGuid().ToString();
         var cache = BuildRedisTypedCache();
 

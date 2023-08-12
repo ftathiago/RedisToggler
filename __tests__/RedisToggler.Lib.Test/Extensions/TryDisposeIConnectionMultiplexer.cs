@@ -17,13 +17,12 @@ public class TryDisposeIConnectionMultiplexer
         using (var provider = service.BuildServiceProvider())
         using (var scope = provider.CreateScope())
         {
-            var connection = scope.ServiceProvider.GetRequiredService<IConnectionMultiplexer>();
+            _ = scope.ServiceProvider.GetRequiredService<IConnectionMultiplexer>();
         }
 
         // Then
         multiplexer.Verify(m => m.Dispose(), Times.Once());
     }
-
 
     [Fact]
     public void Should_DisposeConnection_When_RequiredServiceIsProvider()
@@ -36,7 +35,7 @@ public class TryDisposeIConnectionMultiplexer
         // When
         using (var provider = service.BuildServiceProvider())
         {
-            var connection = provider.GetRequiredService<IConnectionMultiplexer>();
+            _ = provider.GetRequiredService<IConnectionMultiplexer>();
         }
 
         // Then

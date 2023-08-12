@@ -52,7 +52,8 @@ public class RemoveAsyncTest : MemoryCacheBaseTest
 
         // Then
         await act.Should().NotThrowAsync();
-        Logger.Verify(l =>
+        Logger.Verify(
+            l =>
             l.Log(
                 It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
                 It.Is<EventId>(eventId => eventId.Id == 0),

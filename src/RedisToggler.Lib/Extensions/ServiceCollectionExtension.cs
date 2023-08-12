@@ -15,6 +15,12 @@ namespace RedisToggler.Lib.Extensions;
 [ExcludeFromCodeCoverage]
 public static class ServiceCollectionExtension
 {
+    /// <summary>
+    /// Configure cache capabilities for your application.
+    /// This will add Redis and InMemory caches.
+    /// </summary>
+    /// <param name="services">IServiceCollection instance.</param>
+    /// <param name="setupCacheConfig">Configure your cache.</param>
     public static IServiceCollection AddCacheWrapper(
         this IServiceCollection services,
         Action<CacheConfig> setupCacheConfig)
@@ -30,23 +36,23 @@ public static class ServiceCollectionExtension
             .AddSingleton(_ => new CacheMonitor())
             .AddRedisCache()
             .AddSingleton<INoCache, NoTypedCache>()
-            .AddToggledMemoryCache()
+            .AddInMemoryCache()
             .AddSingleton<ICacheStorageStrategy, CacheStorageStrategy>();
 
         return services;
     }
 
-    internal static IServiceCollection AddToggledMemoryCache(
+    private static IServiceCollection AddInMemoryCache(
         this IServiceCollection services) =>
         services
             .AddMemoryCache()
             .AddSingleton<IMemoryTypedCache, MemoryTypedCache>();
 
-
-    internal static IServiceCollection AddRedisCache(
+    private static IServiceCollection AddRedisCache(
         this IServiceCollection services) =>
         services
             .AddSingleton<IRedisTypedCache, RedisTypedCache>()
+
             // Turns Connection destructive by IServiceCollection, avoiding memory leak and
             // connection "keeping open" after application shutdown.
             .AddSingleton(provider =>
@@ -70,7 +76,7 @@ public static class ServiceCollectionExtension
 
                 if (connection is null)
                 {
-                    throw new ArgumentNullException(nameof(options), "All connection options are null");
+                    throw new RedisConnectionException(ConnectionFailureType.UnableToConnect, "All connection options are null");
                 }
 
                 connection.ConnectionFailed += (sender, args) => cacheMonitor.UpdateCache(false);

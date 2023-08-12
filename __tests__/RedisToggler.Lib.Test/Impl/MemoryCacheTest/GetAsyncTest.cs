@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace RedisToggler.Lib.Test.Impl.MemoryCacheTest;
 
@@ -10,7 +9,6 @@ public class GetAsyncTest : MemoryCacheBaseTest
     {
         // Given
         object expectedObject = new SerializableObject { Property = "Object" };
-        var serializedObject = JsonSerializer.Serialize(expectedObject);
         var key = Guid.NewGuid().ToString();
         MemoryCache
             .Setup(mc => mc.TryGetValue(key, out expectedObject))
@@ -34,7 +32,6 @@ public class GetAsyncTest : MemoryCacheBaseTest
         // Given
         object? nullObjectCache = null;
         var expectedObject = new SerializableObject { Property = "Object" };
-        var serializedObject = string.Empty;
         var key = Guid.NewGuid().ToString();
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         mockMethod
@@ -62,7 +59,6 @@ public class GetAsyncTest : MemoryCacheBaseTest
     {
         // Given
         object? expectedObject = null;
-        var serializedObject = string.Empty;
         var key = Guid.NewGuid().ToString();
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         mockMethod
@@ -104,7 +100,8 @@ public class GetAsyncTest : MemoryCacheBaseTest
 
         // Then
         await act.Should().NotThrowAsync<Exception>();
-        Logger.Verify(l =>
+        Logger.Verify(
+            l =>
             l.Log(
                 It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
                 It.Is<EventId>(eventId => eventId.Id == 0),
