@@ -11,6 +11,7 @@ public class CacheStorageStrategyBaseTest
     internal readonly Mock<IRedisTypedCache> _redis = new();
     internal readonly Mock<IMemoryTypedCache> _memory = new();
     internal readonly Mock<INoCache> _noCache = new();
+    internal readonly CacheMonitor _monitor = new();
 
     [Fact]
     public void Should_ReturnRedisHandler_When_ConfigurationRequiresRedis()
@@ -54,7 +55,8 @@ public class CacheStorageStrategyBaseTest
         strategy.Should().BeAssignableTo<INoCache>();
     }
 
-    private ICacheStorageStrategy BuildCacheStorageStrategy() => new CacheStorageStrategy(
+    internal ICacheStorageStrategy BuildCacheStorageStrategy() => new CacheStorageStrategy(
+        _monitor,
         _redis.Object,
         _memory.Object,
         _noCache.Object);

@@ -9,13 +9,16 @@ internal class RedisTypedCache : IRedisTypedCache
 {
     private readonly ILogger<RedisTypedCache> _logger;
     private readonly IDistributedCache _cache;
+    private readonly CacheMonitor _monitor;
 
     public RedisTypedCache(
         ILogger<RedisTypedCache> logger,
-        IDistributedCache cache)
+        IDistributedCache cache,
+        CacheMonitor monitor)
     {
         _logger = logger;
         _cache = cache;
+        _monitor = monitor;
     }
 
     public async Task<TObject?> GetAsync<TObject>(
@@ -35,6 +38,7 @@ internal class RedisTypedCache : IRedisTypedCache
         }
         catch (RedisException ex)
         {
+            _monitor.UpdateCache(false);
             _logger.LogError(
                 message: CacheMessages.CacheGetError,
                 args: nameof(RedisTypedCache),
@@ -58,6 +62,7 @@ internal class RedisTypedCache : IRedisTypedCache
         }
         catch (RedisException ex)
         {
+            _monitor.UpdateCache(false);
             _logger.LogError(
                 message: CacheMessages.CacheRemoveError,
                 args: nameof(RedisTypedCache),
@@ -87,6 +92,7 @@ internal class RedisTypedCache : IRedisTypedCache
         }
         catch (RedisException ex)
         {
+            _monitor.UpdateCache(false);
             _logger.LogError(
                 message: CacheMessages.CacheRemoveError,
                 args: nameof(RedisTypedCache),

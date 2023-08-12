@@ -68,4 +68,25 @@ public class RemoveAsyncTest : RedisTypedCacheBaseTest
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
     }
+
+    [Fact]
+    public async Task Should_TurnOffMonitor_When_RedisRemoveAsyncThrowsExceptionAsync()
+    {
+        // Given
+        var key = Guid.NewGuid().ToString();
+        var cancellation = new CancellationTokenSource();
+        var token = cancellation.Token;
+        DistributedCache
+            .Setup(dc => dc.RemoveAsync(key, token))
+            .ThrowsAsync(new RedisConnectionException(
+                ConnectionFailureType.ProtocolFailure,
+                "Something went wrong"));
+        var cache = BuildRedisTypedCache();
+
+        // When
+        await cache.RemoveAsync(key, token);
+
+        // Then
+        CacheMonitor.Active.Should().BeFalse();
+    }
 }

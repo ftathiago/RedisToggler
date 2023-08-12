@@ -80,4 +80,28 @@ public class SetAsyncTest : RedisTypedCacheBaseTest
                 It.IsAny<CancellationToken>()),
             Times.Once);
     }
+
+    [Fact]
+    public async Task Should_TurnOffCacheMonitor_When_RedisSetAsyncThrowsAnExceptionAsync()
+    {
+        // Given
+        var storedObject = new SerializableObject { Property = "Teste" };
+        var key = Guid.NewGuid().ToString();
+        DistributedCache
+            .Setup(dc => dc.SetAsync(
+                key,
+                It.IsAny<byte[]>(),
+                It.IsAny<DistributedCacheEntryOptions>(),
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new RedisConnectionException(
+                ConnectionFailureType.InternalFailure,
+                "Something went wrong"));
+        var cache = BuildRedisTypedCache();
+
+        // When
+        await cache.SetAsync(key, storedObject, EntryConfiguration);
+
+        // Then
+        CacheMonitor.Active.Should().BeFalse();
+    }
 }

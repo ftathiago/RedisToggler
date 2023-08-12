@@ -7,6 +7,11 @@ namespace RedisToggler.Lib.Test.Impl.RedisCache.RedisTypedCacheTest;
 
 public abstract class RedisTypedCacheBaseTest : IDisposable
 {
+    public RedisTypedCacheBaseTest()
+    {
+        CacheMonitor.UpdateCache(true);
+    }
+
     public CacheEntryConfiguration EntryConfiguration { get; } = new CacheEntryConfiguration()
     {
         Active = true,
@@ -18,6 +23,8 @@ public abstract class RedisTypedCacheBaseTest : IDisposable
 
     public Mock<IDistributedCache> DistributedCache { get; } = new Mock<IDistributedCache>();
 
+    internal CacheMonitor CacheMonitor { get; } = new CacheMonitor();
+
     internal Mock<ILogger<RedisTypedCache>> Logger { get; } = new Mock<ILogger<RedisTypedCache>>();
 
     public void Dispose()
@@ -26,5 +33,8 @@ public abstract class RedisTypedCacheBaseTest : IDisposable
     }
 
     internal ICacheHandler BuildRedisTypedCache() =>
-        new RedisTypedCache(Logger.Object, DistributedCache.Object);
+        new RedisTypedCache(
+            Logger.Object,
+            DistributedCache.Object,
+            CacheMonitor);
 }

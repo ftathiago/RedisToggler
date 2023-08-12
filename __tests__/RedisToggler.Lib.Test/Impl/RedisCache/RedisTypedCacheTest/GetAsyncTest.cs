@@ -117,4 +117,25 @@ public class GetAsyncTest : RedisTypedCacheBaseTest
             Times.Once);
         mockMethod.Verify(m => m(), Times.Never());
     }
+
+    [Fact]
+    public async Task Should_TurnOffMonitor_When_RedisGetAsyncThrowsAnExceptionAsync()
+    {
+        // Given
+        var key = Guid.NewGuid().ToString();
+        var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
+        DistributedCache
+            .Setup(dc => dc.GetAsync(key, It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new RedisConnectionException(ConnectionFailureType.SocketClosed, "Something is wrong"));
+        var cache = BuildRedisTypedCache();
+
+        // When
+        await cache
+            .GetAsync(
+                key: key,
+                getFromSourceAsync: mockMethod.Object);
+
+        // Then
+        CacheMonitor.Active.Should().BeFalse();
+    }
 }
