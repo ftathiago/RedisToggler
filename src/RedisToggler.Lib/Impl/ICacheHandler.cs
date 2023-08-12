@@ -3,17 +3,17 @@ namespace RedisToggler.Lib.Impl;
 internal interface ICacheHandler
 {
     Task<TObject?> GetAsync<TObject>(
-        string key,
+        CacheKey<TObject> key,
         Func<Task<TObject?>> getFromSourceAsync,
         CancellationToken token = default);
 
     Task SetAsync<TObject>(
-        string key,
+        CacheKey<TObject> key,
         TObject value,
         CacheEntryConfiguration entryConfiguration,
         CancellationToken token = default);
 
-    Task RemoveAsync(
-        string key,
+    Task RemoveAsync<TObject>(
+        CacheKey<TObject> key,
         CancellationToken token = default);
 }

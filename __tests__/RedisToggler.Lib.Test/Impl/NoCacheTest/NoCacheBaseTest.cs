@@ -26,7 +26,7 @@ public class NoCacheBaseTest : IDisposable
     public async Task Should_LogSetAttempt_When_TryAddAnObjectToCacheAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cacheObject = new SerializableObject();
         var expectedMessage =
             $"The object {cacheObject} with key {key} could not be stored " +
@@ -54,7 +54,7 @@ public class NoCacheBaseTest : IDisposable
     public async Task Should_LogGetAttempt_When_TryGetAnObjectFromCacheAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cacheObject = new SerializableObject();
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         mockMethod
@@ -86,13 +86,13 @@ public class NoCacheBaseTest : IDisposable
     public async Task Should_LogRemoveAttempt_When_TryRemoveAnObjectOnCacheAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var expectedMessage =
             $"Could not remove object with key {key} because cache is not working.";
         var cache = BuildNoCache();
 
         // When
-        await cache.RemoveAsync(key, CancellationToken);
+        await cache.RemoveAsync<SerializableObject>(key, CancellationToken);
 
         // Then
         Logger.Verify(

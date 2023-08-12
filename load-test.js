@@ -13,10 +13,10 @@ export const options = {
   },
 };
 
-const BASE_URL = "http://localhost:5265";
+const BASE_URL = "http://localhost:5000";
 
 export default () => {
-  http.get(`${BASE_URL}/api/Cities`).json();
+  http.get(`${BASE_URL}/WeatherForecast?fromCache=true`).json();
 
   sleep(1);
 };

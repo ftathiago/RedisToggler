@@ -8,7 +8,7 @@ public class RemoveAsyncTest : MemoryCacheBaseTest
     public async Task Should_RemoveFromMemoryCache_When_KeyExistsAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cache = BuildMemoryTypedCache();
 
         // When
@@ -22,13 +22,13 @@ public class RemoveAsyncTest : MemoryCacheBaseTest
     public async Task Should_NotThrowException_When_CancellationWasRequestedToMemoryCacheAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cancellation = new CancellationTokenSource();
         var token = cancellation.Token;
         var cache = BuildMemoryTypedCache();
 
         // When
-        Func<Task> act = () => cache.RemoveAsync(key, token);
+        Func<Task> act = () => cache.RemoveAsync<SerializableObject>(key, token);
         cancellation.Cancel();
 
         // Then
@@ -39,7 +39,7 @@ public class RemoveAsyncTest : MemoryCacheBaseTest
     public async Task Should_NotThrowException_When_MemoryThrowsOneAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cancellation = new CancellationTokenSource();
         var token = cancellation.Token;
         MemoryCache
@@ -48,7 +48,7 @@ public class RemoveAsyncTest : MemoryCacheBaseTest
         var cache = BuildMemoryTypedCache();
 
         // When
-        Func<Task> act = () => cache.RemoveAsync(key, token);
+        Func<Task> act = () => cache.RemoveAsync<SerializableObject>(key, token);
 
         // Then
         await act.Should().NotThrowAsync();

@@ -43,9 +43,10 @@ public interface IDistributedTypedCache<TEntryConfig>
     /// <summary>
     /// Remove a entry from cache.
     /// </summary>
+    /// <typeparam name="TObject">Which object type should be removed</typeparam>
     /// <param name="key">The key for searching.</param>
     /// <param name="token">Cancellation Token</param>
-    Task RemoveAsync(
+    Task RemoveAsync<TObject>(
         string key,
         CancellationToken token = default);
 }

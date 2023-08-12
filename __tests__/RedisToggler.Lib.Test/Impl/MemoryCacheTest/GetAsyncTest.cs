@@ -9,7 +9,7 @@ public class GetAsyncTest : MemoryCacheBaseTest
     {
         // Given
         object expectedObject = new SerializableObject { Property = "Object" };
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         MemoryCache
             .Setup(mc => mc.TryGetValue(key, out expectedObject))
             .Returns(true);
@@ -32,7 +32,7 @@ public class GetAsyncTest : MemoryCacheBaseTest
         // Given
         object? nullObjectCache = null;
         var expectedObject = new SerializableObject { Property = "Object" };
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         mockMethod
             .Setup(m => m())
@@ -59,7 +59,7 @@ public class GetAsyncTest : MemoryCacheBaseTest
     {
         // Given
         object? expectedObject = null;
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         mockMethod
             .Setup(m => m())
@@ -85,7 +85,7 @@ public class GetAsyncTest : MemoryCacheBaseTest
     {
         // Given
         object? expectedObject = null;
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         MemoryCache
             .Setup(mc => mc.TryGetValue(key, out expectedObject))

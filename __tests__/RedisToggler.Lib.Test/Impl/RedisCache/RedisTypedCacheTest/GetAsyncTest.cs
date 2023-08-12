@@ -13,9 +13,9 @@ public class GetAsyncTest : RedisTypedCacheBaseTest
         // Given
         var expectedObject = new SerializableObject { Property = "Object" };
         var serializedObject = JsonSerializer.Serialize(expectedObject);
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         DistributedCache
-            .Setup(dc => dc.GetAsync(key, It.IsAny<CancellationToken>()))
+            .Setup(dc => dc.GetAsync(key.Value, It.IsAny<CancellationToken>()))
             .ReturnsAsync(UTF8Encoding.UTF8.GetBytes(serializedObject));
         var cache = BuildRedisTypedCache();
 
@@ -37,13 +37,13 @@ public class GetAsyncTest : RedisTypedCacheBaseTest
         // Given
         var expectedObject = new SerializableObject { Property = "Object" };
         var serializedObject = string.Empty;
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         mockMethod
             .Setup(m => m())
             .ReturnsAsync(expectedObject);
         DistributedCache
-            .Setup(dc => dc.GetAsync(key, It.IsAny<CancellationToken>()))
+            .Setup(dc => dc.GetAsync(key.Value, It.IsAny<CancellationToken>()))
             .ReturnsAsync(UTF8Encoding.UTF8.GetBytes(serializedObject));
         var cache = BuildRedisTypedCache();
 
@@ -65,13 +65,13 @@ public class GetAsyncTest : RedisTypedCacheBaseTest
         // Given
         SerializableObject? expectedObject = null;
         var serializedObject = string.Empty;
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         mockMethod
             .Setup(m => m())
             .ReturnsAsync(expectedObject);
         DistributedCache
-            .Setup(dc => dc.GetAsync(key, It.IsAny<CancellationToken>()))
+            .Setup(dc => dc.GetAsync(key.Value, It.IsAny<CancellationToken>()))
             .ReturnsAsync(UTF8Encoding.UTF8.GetBytes(serializedObject));
         var cache = BuildRedisTypedCache();
 
@@ -90,10 +90,10 @@ public class GetAsyncTest : RedisTypedCacheBaseTest
     public async Task Should_NotRethrowException_When_CacheThrowsOneAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         DistributedCache
-            .Setup(dc => dc.GetAsync(key, It.IsAny<CancellationToken>()))
+            .Setup(dc => dc.GetAsync(key.Value, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new RedisConnectionException(ConnectionFailureType.SocketClosed, "Something is wrong"));
         var cache = BuildRedisTypedCache();
 
@@ -123,10 +123,10 @@ public class GetAsyncTest : RedisTypedCacheBaseTest
     public async Task Should_TurnOffMonitor_When_RedisGetAsyncThrowsAnExceptionAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var mockMethod = new Mock<Func<Task<SerializableObject?>>>(MockBehavior.Strict);
         DistributedCache
-            .Setup(dc => dc.GetAsync(key, It.IsAny<CancellationToken>()))
+            .Setup(dc => dc.GetAsync(key.Value, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new RedisConnectionException(ConnectionFailureType.SocketClosed, "Something is wrong"));
         var cache = BuildRedisTypedCache();
 

@@ -14,7 +14,7 @@ public class SetAsyncTest : RedisTypedCacheBaseTest
         var storedObject = new SerializableObject { Property = "Teste" };
         var serializedObject = UTF8Encoding.UTF8.GetBytes(
             JsonSerializer.Serialize(storedObject));
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cache = BuildRedisTypedCache();
 
         // When
@@ -23,7 +23,7 @@ public class SetAsyncTest : RedisTypedCacheBaseTest
         // Then
         DistributedCache.Verify(
             dc => dc.SetAsync(
-                key,
+                key.Value,
                 serializedObject,
                 It.IsAny<DistributedCacheEntryOptions>(),
                 It.IsAny<CancellationToken>()),
@@ -35,10 +35,10 @@ public class SetAsyncTest : RedisTypedCacheBaseTest
     {
         // Given
         var storedObject = new SerializableObject { Property = "Teste" };
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         DistributedCache
             .Setup(dc => dc.SetAsync(
-                key,
+                key.Value,
                 It.IsAny<byte[]>(),
                 It.IsAny<DistributedCacheEntryOptions>(),
                 It.IsAny<CancellationToken>()))
@@ -59,7 +59,7 @@ public class SetAsyncTest : RedisTypedCacheBaseTest
     {
         // Given
         var storedObject = new SerializableObject { Property = "Teste" };
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cache = BuildRedisTypedCache();
 
         // When
@@ -82,10 +82,10 @@ public class SetAsyncTest : RedisTypedCacheBaseTest
     {
         // Given
         var storedObject = new SerializableObject { Property = "Teste" };
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         DistributedCache
             .Setup(dc => dc.SetAsync(
-                key,
+                key.Value,
                 It.IsAny<byte[]>(),
                 It.IsAny<DistributedCacheEntryOptions>(),
                 It.IsAny<CancellationToken>()))

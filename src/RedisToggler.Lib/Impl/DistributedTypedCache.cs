@@ -30,13 +30,17 @@ public sealed class DistributedTypedCache<TEntryConfig> : IDistributedTypedCache
     public async Task<TObject?> GetAsync<TObject>(string key, Func<Task<TObject?>> getFromSourceAsync, CancellationToken token = default)
     {
         var cache = _cacheStrategy.Get(_cacheConfig);
-        return await cache.GetAsync(key, getFromSourceAsync, token);
+        var cacheKey = new CacheKey<TObject>(_entryConfig, key);
+
+        return await cache.GetAsync(cacheKey, getFromSourceAsync, token);
     }
 
-    public async Task RemoveAsync(string key, CancellationToken token = default)
+    public async Task RemoveAsync<TObject>(string key, CancellationToken token = default)
     {
         var cache = _cacheStrategy.Get(_cacheConfig);
-        await cache.RemoveAsync(key, token);
+        var cacheKey = new CacheKey<TObject>(_entryConfig, key);
+
+        await cache.RemoveAsync<TObject>(cacheKey, token);
     }
 
     public async Task SetAsync<TObject>(
@@ -45,7 +49,8 @@ public sealed class DistributedTypedCache<TEntryConfig> : IDistributedTypedCache
         CancellationToken token = default)
     {
         var cache = _cacheStrategy.Get(_cacheConfig);
+        var cacheKey = new CacheKey<TObject>(_entryConfig, key);
 
-        await cache.SetAsync(key, value, _entryConfig, token);
+        await cache.SetAsync(cacheKey, value, _entryConfig, token);
     }
 }

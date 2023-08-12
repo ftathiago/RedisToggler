@@ -9,27 +9,27 @@ public class RemoveAsyncTest : RedisTypedCacheBaseTest
     public async Task Should_RemoveFromCache_When_KeyExistsAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cache = BuildRedisTypedCache();
 
         // When
-        await cache.RemoveAsync(key, CancellationToken);
+        await cache.RemoveAsync<SerializableObject>(key, CancellationToken);
 
         // Then
-        DistributedCache.Verify(dc => dc.RemoveAsync(key, CancellationToken), Times.Once());
+        DistributedCache.Verify(dc => dc.RemoveAsync(key.Value, CancellationToken), Times.Once());
     }
 
     [Fact]
     public async Task Should_NotThrowException_When_CancellationWasRequestedAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cancellation = new CancellationTokenSource();
         var token = cancellation.Token;
         var cache = BuildRedisTypedCache();
 
         // When
-        Func<Task> act = () => cache.RemoveAsync(key, token);
+        Func<Task> act = () => cache.RemoveAsync<SerializableObject>(key, token);
         cancellation.Cancel();
 
         // Then
@@ -40,18 +40,18 @@ public class RemoveAsyncTest : RedisTypedCacheBaseTest
     public async Task Should_NotThrowException_When_RedisThrowsOneAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cancellation = new CancellationTokenSource();
         var token = cancellation.Token;
         DistributedCache
-            .Setup(dc => dc.RemoveAsync(key, token))
+            .Setup(dc => dc.RemoveAsync(key.Value, token))
             .ThrowsAsync(new RedisConnectionException(
                 ConnectionFailureType.ProtocolFailure,
                 "Something went wrong"));
         var cache = BuildRedisTypedCache();
 
         // When
-        Func<Task> act = () => cache.RemoveAsync(key, token);
+        Func<Task> act = () => cache.RemoveAsync<SerializableObject>(key, token);
 
         // Then
         await act.Should().NotThrowAsync();
@@ -72,18 +72,18 @@ public class RemoveAsyncTest : RedisTypedCacheBaseTest
     public async Task Should_TurnOffMonitor_When_RedisRemoveAsyncThrowsExceptionAsync()
     {
         // Given
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         var cancellation = new CancellationTokenSource();
         var token = cancellation.Token;
         DistributedCache
-            .Setup(dc => dc.RemoveAsync(key, token))
+            .Setup(dc => dc.RemoveAsync(key.Value, token))
             .ThrowsAsync(new RedisConnectionException(
                 ConnectionFailureType.ProtocolFailure,
                 "Something went wrong"));
         var cache = BuildRedisTypedCache();
 
         // When
-        await cache.RemoveAsync(key, token);
+        await cache.RemoveAsync<SerializableObject>(key, token);
 
         // Then
         CacheMonitor.Active.Should().BeFalse();

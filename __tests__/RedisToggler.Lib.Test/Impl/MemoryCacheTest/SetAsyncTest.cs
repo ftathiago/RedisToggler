@@ -7,7 +7,7 @@ public class SetAsyncTest : MemoryCacheBaseTest
     {
         // Given
         var storedObject = new SerializableObject { Property = "Teste" };
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         MemoryCache
             .Setup(mc => mc.CreateEntry(key))
             .Returns(CacheEntry.Object);
@@ -33,7 +33,7 @@ public class SetAsyncTest : MemoryCacheBaseTest
     {
         // Given
         var storedObject = new SerializableObject { Property = "Teste" };
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         MemoryCache
             .Setup(dc => dc.CreateEntry(It.IsAny<object>()))
             .Throws(new OutOfMemoryException("Something went wrong"));
@@ -51,7 +51,7 @@ public class SetAsyncTest : MemoryCacheBaseTest
     {
         // Given
         var storedObject = new SerializableObject { Property = "Teste" };
-        var key = Guid.NewGuid().ToString();
+        var key = new CacheKey<SerializableObject>(EntryConfiguration, Guid.NewGuid().ToString());
         MemoryCache
             .Setup(mc => mc.CreateEntry(key))
             .Returns(CacheEntry.Object);

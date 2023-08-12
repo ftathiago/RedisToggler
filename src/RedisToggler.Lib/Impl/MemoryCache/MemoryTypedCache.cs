@@ -17,7 +17,7 @@ internal class MemoryTypedCache : IMemoryTypedCache
     }
 
     public async Task<TObject?> GetAsync<TObject>(
-        string key,
+        CacheKey<TObject> key,
         Func<Task<TObject?>> getFromSourceAsync,
         CancellationToken token = default)
     {
@@ -41,8 +41,8 @@ internal class MemoryTypedCache : IMemoryTypedCache
         }
     }
 
-    public Task RemoveAsync(
-        string key,
+    public Task RemoveAsync<TObject>(
+        CacheKey<TObject> key,
         CancellationToken token = default)
     {
         try
@@ -61,7 +61,7 @@ internal class MemoryTypedCache : IMemoryTypedCache
     }
 
     public Task SetAsync<TObject>(
-        string key,
+        CacheKey<TObject> key,
         TObject value,
         CacheEntryConfiguration entryConfiguration,
         CancellationToken token = default)

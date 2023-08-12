@@ -22,13 +22,13 @@ internal class RedisTypedCache : IRedisTypedCache
     }
 
     public async Task<TObject?> GetAsync<TObject>(
-        string key,
+        CacheKey<TObject> key,
         Func<Task<TObject?>> getFromSourceAsync,
         CancellationToken token = default)
     {
         try
         {
-            var serialized = await _cache.GetStringAsync(key, token);
+            var serialized = await _cache.GetStringAsync(key.Value, token);
             if (string.IsNullOrEmpty(serialized))
             {
                 return await getFromSourceAsync();
@@ -47,8 +47,8 @@ internal class RedisTypedCache : IRedisTypedCache
         }
     }
 
-    public async Task RemoveAsync(
-        string key,
+    public async Task RemoveAsync<TObject>(
+        CacheKey<TObject> key,
         CancellationToken token = default)
     {
         if (token.IsCancellationRequested)
@@ -58,7 +58,7 @@ internal class RedisTypedCache : IRedisTypedCache
 
         try
         {
-            await _cache.RemoveAsync(key, token);
+            await _cache.RemoveAsync(key.Value, token);
         }
         catch (RedisException ex)
         {
@@ -71,7 +71,7 @@ internal class RedisTypedCache : IRedisTypedCache
     }
 
     public async Task SetAsync<TObject>(
-        string key,
+        CacheKey<TObject> key,
         TObject value,
         CacheEntryConfiguration entryConfiguration,
         CancellationToken token = default)
@@ -80,7 +80,7 @@ internal class RedisTypedCache : IRedisTypedCache
         try
         {
             await _cache.SetStringAsync(
-                key: key,
+                key: key.Value,
                 value: serialized,
                 options: new DistributedCacheEntryOptions
                 {

@@ -12,7 +12,7 @@ internal class NoTypedCache : INoCache
     }
 
     public async Task<TObject?> GetAsync<TObject>(
-        string key,
+        CacheKey<TObject> key,
         Func<Task<TObject?>> getFromSourceAsync,
         CancellationToken token = default)
     {
@@ -24,8 +24,8 @@ internal class NoTypedCache : INoCache
         return await getFromSourceAsync();
     }
 
-    public Task RemoveAsync(
-        string key,
+    public Task RemoveAsync<TObject>(
+        CacheKey<TObject> key,
         CancellationToken token = default)
     {
         _logger.LogWarning(
@@ -37,7 +37,7 @@ internal class NoTypedCache : INoCache
     }
 
     public Task SetAsync<TObject>(
-        string key,
+        CacheKey<TObject> key,
         TObject value,
         CacheEntryConfiguration entryConfiguration,
         CancellationToken token = default)

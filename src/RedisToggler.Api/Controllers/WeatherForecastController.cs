@@ -27,7 +27,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public async Task<IEnumerable<WeatherForecast>> GetAsync([FromQuery] bool fromCache)
     {
-        const string key = "A Chave";
+        const string key = "c3eed152-558b-42c1-93d8-9b87799b6aba";
         var obj = Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),
