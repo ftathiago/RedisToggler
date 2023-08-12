@@ -55,6 +55,21 @@ public class CacheStorageStrategyBaseTest
         strategy.Should().BeAssignableTo<INoCache>();
     }
 
+    [Fact]
+    public void Should_AlwaysReturnNoCache_When_MonitorIsNotActive()
+    {
+        // Given
+        _monitor.UpdateCache(false);
+        var config = new CacheConfig { CacheType = CacheType.Redis };
+        var storageStrategy = BuildCacheStorageStrategy();
+
+        // When
+        var strategy = storageStrategy.Get(config);
+
+        // Then
+        strategy.Should().BeAssignableTo<INoCache>();
+    }
+
     internal ICacheStorageStrategy BuildCacheStorageStrategy() => new CacheStorageStrategy(
         _monitor,
         _redis.Object,
