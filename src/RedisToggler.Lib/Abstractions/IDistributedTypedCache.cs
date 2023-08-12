@@ -1,6 +1,9 @@
+using RedisToggler.Lib.Impl;
+
 namespace RedisToggler.Lib.Abstractions;
 
-public interface IDistributedTypedCache
+public interface IDistributedTypedCache<TEntryConfig>
+    where TEntryConfig : CacheEntryConfiguration
 {
     Task<TObject?> GetAsync<TObject>(
         string key,

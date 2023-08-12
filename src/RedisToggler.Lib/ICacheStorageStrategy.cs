@@ -3,7 +3,7 @@ using RedisToggler.Lib.Impl;
 
 namespace RedisToggler.Lib;
 
-internal interface ICacheStorageStrategy
+public interface ICacheStorageStrategy
 {
-    ICacheHandler Get(CacheConfig config);
+    internal ICacheHandler Get(CacheConfig config);
 }

@@ -3,6 +3,10 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RedisToggler.Lib.Abstractions;
+using RedisToggler.Lib.Impl;
+using RedisToggler.Lib.Impl.MemoryCache;
+using RedisToggler.Lib.Impl.NoCache;
+using RedisToggler.Lib.Impl.RedisCache;
 using StackExchange.Redis;
 using System.Diagnostics.CodeAnalysis;
 
@@ -19,22 +23,30 @@ public static class ServiceCollectionExtension
 
         setupCacheConfig(cacheConfig);
 
-        _ = cacheConfig.CacheType switch
-        {
-            CacheType.Redis => services.AddRedisCache(opt => opt.Configuration = cacheConfig.ConnectionString),
-            _ => throw new ArgumentException("Cache config is invalid", nameof(setupCacheConfig)),
-        };
+        services
+            .Configure<RedisCacheOptions>(opt => opt.Configuration = cacheConfig.ConnectionString)
+            .AddSingleton(cacheConfig)
+            .AddSingleton(typeof(IDistributedTypedCache<>), typeof(DistributedTypedCache<>))
+            .AddSingleton(_ => new CacheMonitor())
+            .AddRedisCache()
+            .AddSingleton<INoCache, NoTypedCache>()
+            .AddToggledMemoryCache()
+            .AddSingleton<ICacheStorageStrategy, CacheStorageStrategy>();
 
         return services;
     }
 
-    internal static IServiceCollection AddRedisCache(
-        this IServiceCollection services,
-        Action<RedisCacheOptions> setupAction) =>
+    internal static IServiceCollection AddToggledMemoryCache(
+        this IServiceCollection services) =>
         services
-            .Configure(setupAction)
-            .AddSingleton(_ => new CacheMonitor())
+            .AddMemoryCache()
+            .AddSingleton<IMemoryTypedCache, MemoryTypedCache>();
 
+
+    internal static IServiceCollection AddRedisCache(
+        this IServiceCollection services) =>
+        services
+            .AddSingleton<IRedisTypedCache, RedisTypedCache>()
             // Turns Connection destructive by IServiceCollection, avoiding memory leak and
             // connection "keeping open" after application shutdown.
             .AddSingleton(provider =>
@@ -70,7 +82,7 @@ public static class ServiceCollectionExtension
             // This is need in this way, because otherwise, we will have a circular reference
             // about connection configuration. Can be removed, maybe, if reading original source,
             // we create this objects tree manually. But, we want to maintain any lib change?
-            .AddSingleton(provider => new ServiceCollection()
+            .AddSingleton<IDistributedCache>(provider => new ServiceCollection()
                 .AddStackExchangeRedisCache(opt =>
                 {
                     opt.Configuration = null;

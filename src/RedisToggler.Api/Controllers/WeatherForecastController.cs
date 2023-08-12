@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
+using RedisToggler.Lib.Abstractions;
+using RedisToggler.Lib.Impl;
 
 namespace RedisToggler.Api.Controllers;
 
@@ -13,26 +14,34 @@ public class WeatherForecastController : ControllerBase
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
-    private readonly IDistributedCache _cache;
+    private readonly IDistributedTypedCache<CacheEntryConfiguration> _cache;
 
     public WeatherForecastController(
         ILogger<WeatherForecastController> logger,
-        IDistributedCache cache)
+        IDistributedTypedCache<CacheEntryConfiguration> cache)
     {
         _logger = logger;
         _cache = cache;
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    public async Task<IEnumerable<WeatherForecast>> GetAsync([FromQuery] bool fromCache)
     {
-        _cache.SetString("Teste", "value");
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        const string key = "A Chave";
+        var obj = Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),
             TemperatureC = Random.Shared.Next(-20, 55),
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
         .ToArray();
+
+        if (fromCache)
+        {
+            obj = await _cache.GetAsync(key, () => Task.FromResult(obj)!);
+            await _cache.SetAsync(key, obj);
+        }
+
+        return obj!;
     }
 }

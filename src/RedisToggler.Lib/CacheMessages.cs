@@ -22,5 +22,5 @@ internal static class CacheMessages
 
     public static EventId NoCacheEventId = new EventId(
         id: 11082023,
-        name: $"{Assembly.GetExecutingAssembly().GetName().Name}fff67b92-465b-441f-ba80-ffee2e1dde2e");
+        name: $"{Assembly.GetEntryAssembly()?.GetName().Name}fff67b92-465b-441f-ba80-ffee2e1dde2e");
 }

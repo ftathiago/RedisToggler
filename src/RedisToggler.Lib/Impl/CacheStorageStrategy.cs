@@ -8,8 +8,10 @@ namespace RedisToggler.Lib.Impl;
 internal class CacheStorageStrategy : ICacheStorageStrategy
 {
     private readonly Dictionary<CacheType, ICacheHandler> _cache = new();
+    private readonly CacheMonitor _monitor;
 
     public CacheStorageStrategy(
+        CacheMonitor monitor,
         IRedisTypedCache redisTypedCache,
         IMemoryTypedCache memoryTypedCache,
         INoCache notUseCache)
@@ -17,8 +19,16 @@ internal class CacheStorageStrategy : ICacheStorageStrategy
         _cache.Add(CacheType.Redis, redisTypedCache);
         _cache.Add(CacheType.Memory, memoryTypedCache);
         _cache.Add(CacheType.NoCache, notUseCache);
+        _monitor = monitor;
     }
 
-    public ICacheHandler Get(CacheConfig config) =>
-        _cache[config.CacheType];
+    public ICacheHandler Get(CacheConfig config)
+    {
+        if (_monitor.Active)
+        {
+            return _cache[config.CacheType];
+        }
+
+        return _cache[CacheType.NoCache];
+    }
 }

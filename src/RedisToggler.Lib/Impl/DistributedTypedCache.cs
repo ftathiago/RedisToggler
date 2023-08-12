@@ -2,14 +2,14 @@ using RedisToggler.Lib.Abstractions;
 
 namespace RedisToggler.Lib.Impl;
 
-public sealed class DistributedTypedCache<TEntryConfig> : IDistributedTypedCache
+public sealed class DistributedTypedCache<TEntryConfig> : IDistributedTypedCache<TEntryConfig>
     where TEntryConfig : CacheEntryConfiguration
 {
     private readonly ICacheStorageStrategy _cacheStrategy;
     private readonly CacheConfig _cacheConfig;
     private readonly TEntryConfig _entryConfig;
 
-    internal DistributedTypedCache(
+    public DistributedTypedCache(
         ICacheStorageStrategy cacheStrategy,
         CacheConfig cacheConfig,
         TEntryConfig entryConfig)
