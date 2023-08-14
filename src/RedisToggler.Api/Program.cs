@@ -1,6 +1,6 @@
-using RedisToggler.Lib;
+using RedisToggler.Lib.Abstractions;
+using RedisToggler.Lib.Configurations;
 using RedisToggler.Lib.Extensions;
-using RedisToggler.Lib.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 

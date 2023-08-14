@@ -1,6 +1,6 @@
-using RedisToggler.Lib.Impl;
+using RedisToggler.Lib.Configurations;
 
-namespace RedisToggler.Lib.Abstractions;
+namespace RedisToggler.Lib.Handlers;
 
 #pragma warning disable S2326
 /// <summary>

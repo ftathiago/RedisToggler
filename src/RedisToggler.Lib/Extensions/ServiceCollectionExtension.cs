@@ -2,11 +2,12 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using RedisToggler.Lib.Abstractions;
+using RedisToggler.Lib.Configurations;
+using RedisToggler.Lib.Handlers;
+using RedisToggler.Lib.Handlers.MemoryCacheHandlers;
+using RedisToggler.Lib.Handlers.NoCacheHandlers;
+using RedisToggler.Lib.Handlers.RedisCacheHandlers;
 using RedisToggler.Lib.Impl;
-using RedisToggler.Lib.Impl.MemoryCache;
-using RedisToggler.Lib.Impl.NoCache;
-using RedisToggler.Lib.Impl.RedisCache;
 using StackExchange.Redis;
 using System.Diagnostics.CodeAnalysis;
 
@@ -35,7 +36,7 @@ public static class ServiceCollectionExtension
             .AddSingleton(typeof(IDistributedTypedCache<>), typeof(DistributedTypedCache<>))
             .AddSingleton(_ => new CacheMonitor())
             .AddRedisCache()
-            .AddSingleton<INoCache, NoTypedCache>()
+            .AddSingleton<INoCacheHandler, NoCacheHandler>()
             .AddInMemoryCache()
             .AddSingleton<ICacheStorageStrategy, CacheStorageStrategy>();
 
@@ -46,12 +47,12 @@ public static class ServiceCollectionExtension
         this IServiceCollection services) =>
         services
             .AddMemoryCache()
-            .AddSingleton<IMemoryTypedCache, MemoryTypedCache>();
+            .AddSingleton<IMemoryCacheHandler, MemoryCacheHandler>();
 
     private static IServiceCollection AddRedisCache(
         this IServiceCollection services) =>
         services
-            .AddSingleton<IRedisTypedCache, RedisTypedCache>()
+            .AddSingleton<IRedisCacheHandler, RedisCacheHandler>()
 
             // Turns Connection destructive by IServiceCollection, avoiding memory leak and
             // connection "keeping open" after application shutdown.

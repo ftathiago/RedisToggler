@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using RedisToggler.Lib.Abstractions;
-using RedisToggler.Lib.Impl;
+using RedisToggler.Lib.Configurations;
+using RedisToggler.Lib.Handlers;
 
 namespace RedisToggler.Api.Controllers;
 
@@ -28,6 +28,7 @@ public class WeatherForecastController : ControllerBase
     public async Task<IEnumerable<WeatherForecast>> GetAsync([FromQuery] bool fromCache)
     {
         const string key = "c3eed152-558b-42c1-93d8-9b87799b6aba";
+
         var obj = Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),
