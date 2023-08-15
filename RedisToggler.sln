@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3C415A1B-9324-44AC-8BE7-E52A0BFFA054}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisToggler.Api", "src\RedisToggler.Api\RedisToggler.Api.csproj", "{24CAFEF1-B14A-4BDB-B07D-0EF4F4160623}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisToggler.Lib", "src\RedisToggler.Lib\RedisToggler.Lib.csproj", "{1BC5A7D3-18E0-4D0E-9F9B-AF8B6402B16F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__tests__", "__tests__", "{546DFB2F-3B14-47ED-B6AA-F76AA48775FB}"
@@ -22,10 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{24CAFEF1-B14A-4BDB-B07D-0EF4F4160623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24CAFEF1-B14A-4BDB-B07D-0EF4F4160623}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24CAFEF1-B14A-4BDB-B07D-0EF4F4160623}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24CAFEF1-B14A-4BDB-B07D-0EF4F4160623}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1BC5A7D3-18E0-4D0E-9F9B-AF8B6402B16F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1BC5A7D3-18E0-4D0E-9F9B-AF8B6402B16F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BC5A7D3-18E0-4D0E-9F9B-AF8B6402B16F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -36,7 +30,6 @@ Global
 		{E07F60E6-F244-4FF9-B8EC-2FCF71A19D26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{24CAFEF1-B14A-4BDB-B07D-0EF4F4160623} = {3C415A1B-9324-44AC-8BE7-E52A0BFFA054}
 		{1BC5A7D3-18E0-4D0E-9F9B-AF8B6402B16F} = {3C415A1B-9324-44AC-8BE7-E52A0BFFA054}
 		{E07F60E6-F244-4FF9-B8EC-2FCF71A19D26} = {546DFB2F-3B14-47ED-B6AA-F76AA48775FB}
 	EndGlobalSection

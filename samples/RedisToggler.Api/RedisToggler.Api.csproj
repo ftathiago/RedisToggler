@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RedisToggler.Lib\RedisToggler.Lib.csproj" />
+    <ProjectReference Include="..\..\src\RedisToggler.Lib\RedisToggler.Lib.csproj" />
   </ItemGroup>
 
-</Project>
+</Project>git 
