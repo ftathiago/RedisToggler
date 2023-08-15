@@ -35,9 +35,9 @@ internal class MemoryCacheHandler : IMemoryCacheHandler
         catch (Exception ex)
         {
             _logger.LogError(
+                exception: ex,
                 message: CacheMessages.CacheGetError,
-                args: nameof(MemoryCacheHandler),
-                exception: ex);
+                args: nameof(MemoryCacheHandler));
             return default;
         }
     }
@@ -53,9 +53,9 @@ internal class MemoryCacheHandler : IMemoryCacheHandler
         catch (Exception ex)
         {
             _logger.LogError(
+                exception: ex,
                 message: CacheMessages.CacheRemoveError,
-                args: nameof(MemoryCacheHandler),
-                exception: ex);
+                args: nameof(MemoryCacheHandler));
         }
 
         return Task.CompletedTask;
@@ -78,9 +78,9 @@ internal class MemoryCacheHandler : IMemoryCacheHandler
         catch (Exception ex)
         {
             _logger.LogError(
+                exception: ex,
                 message: CacheMessages.CacheRemoveError,
-                args: nameof(MemoryCacheHandler),
-                exception: ex);
+                args: nameof(MemoryCacheHandler));
         }
 
         return Task.CompletedTask;
