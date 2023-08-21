@@ -80,6 +80,10 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
+      - name: Copy Readme to lib
+        run: cp ./README.md ./src/RedisToggler.Lib/
+        if: github.event_name != 'pull_request'
+        
       - name: Create package
         run: dotnet pack *.sln -c Release -o nupkg -p:PackageVersion=${{ steps.gitversion.outputs.semVer }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }} /p:Version=${{ steps.gitversion.outputs.semVer }}
         if: github.event_name != 'pull_request'
