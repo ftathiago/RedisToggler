@@ -41,9 +41,9 @@ internal class RedisCacheHandler : IRedisCacheHandler
         {
             _monitor.UpdateCache(false);
             _logger.LogError(
+                exception: ex,
                 message: CacheMessages.CacheGetError,
-                args: nameof(RedisCacheHandler),
-                exception: ex);
+                args: nameof(RedisCacheHandler));
             return default;
         }
     }
@@ -65,9 +65,9 @@ internal class RedisCacheHandler : IRedisCacheHandler
         {
             _monitor.UpdateCache(false);
             _logger.LogError(
+                exception: ex,
                 message: CacheMessages.CacheRemoveError,
-                args: nameof(RedisCacheHandler),
-                exception: ex);
+                args: nameof(RedisCacheHandler));
         }
     }
 
@@ -94,9 +94,9 @@ internal class RedisCacheHandler : IRedisCacheHandler
         {
             _monitor.UpdateCache(false);
             _logger.LogError(
+                exception: ex,
                 message: CacheMessages.CacheRemoveError,
-                args: nameof(RedisCacheHandler),
-                exception: ex);
+                args: nameof(RedisCacheHandler));
         }
     }
 }
