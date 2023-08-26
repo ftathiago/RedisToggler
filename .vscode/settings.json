@@ -1,3 +1,4 @@
 {
-    "dotnet.defaultSolution": "RedisToggler.sln"
+    "dotnet.defaultSolution": "RedisToggler.sln",
+    "sarif-viewer.connectToGithubCodeScanning": "on"
 }
