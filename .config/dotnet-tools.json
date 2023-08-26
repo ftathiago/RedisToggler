@@ -25,6 +25,12 @@
       "commands": [
         "dotnet-gitversion"
       ]
+    },
+    "versionize": {
+      "version": "1.18.0",
+      "commands": [
+        "versionize"
+      ]
     }
   }
 }
