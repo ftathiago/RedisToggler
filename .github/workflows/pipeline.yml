@@ -12,12 +12,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
+      #
+      # Install all dependencies
+      #
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ secrets.PAT }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -30,10 +33,41 @@ jobs:
           java-version: 17
           distribution: "zulu"
 
+      - name: Restore Dotnet tools
+        run: dotnet tool restore
+
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0
         with:
           versionSpec: "5.x"
+
+      #
+      # Set versioning
+      #
+
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0
+        id: gitversion # id to later be referenced
+        with:
+          useConfigFile: true
+
+      #
+      # Generate CHANGELOG
+      #
+      - name: Generate CHANGELOG file
+        if: contains(github.ref, 'release/')
+        run: dotnet versionize -r ${{ steps.gitversion.outputs.semVer }}
+
+      - name: Commit report
+        if: contains(github.ref, 'release/')        
+        run: |
+          git config --global user.name 'Francisco Thiago de Almeida'
+          git config --global user.email 'ftathiago@gmail.com'
+          git add . 
+          git commit -am 'docs(auto): Update CHANGELOG
+
+          [skip ci]'
+          git push
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
@@ -60,12 +94,6 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Determine Version
-        uses: gittools/actions/gitversion/execute@v0
-        id: gitversion # id to later be referenced
-        with:
-          useConfigFile: true
-
       - name: Test and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -79,11 +107,19 @@ jobs:
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
+     
+      #
+      # Prepare things to be pushed to NUGET
+      #
       - name: Copy Readme to lib
-        run: cp ./README.md ./src/RedisToggler.Lib/
         if: github.event_name != 'pull_request'
+        run: cp ./README.md ./src/RedisToggler.Lib/
+
+      - name: Copy CHANGELOG to lib
+        if: contains(github.ref, 'release/')
+        run: cp ./CHANGELOG.md ./src/RedisToggler.Lib/
         
+
       - name: Create package
         run: dotnet pack *.sln -c Release -o nupkg -p:PackageVersion=${{ steps.gitversion.outputs.semVer }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }} /p:Version=${{ steps.gitversion.outputs.semVer }}
         if: github.event_name != 'pull_request'

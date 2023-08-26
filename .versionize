@@ -1,0 +1,32 @@
+{
+    "changelogAll": true,
+    "skipTag": true,
+    "skipDirty": true,
+    "skipCommit": true,
+    "commit-suffix": "skip ci",
+    "workingDir": "./src/RedisToggler.Lib",
+    "changelog": {
+        "header": "BlogDoFt.RedisToggler.Lib",
+        "sections": [
+            {
+                "type": "feat",
+                "section": "✨ Features",
+                "hidden": false
+            },
+            {
+                "type": "fix",
+                "section": "🐛 Bug Fixes",
+                "hidden": true
+            },
+            {
+                "type": "perf",
+                "section": "🚀 Performance Improvement",
+                "hidden": false
+            },
+            {
+                "type": "docs",
+                "hidden": true
+            }
+        ]
+    }
+}
