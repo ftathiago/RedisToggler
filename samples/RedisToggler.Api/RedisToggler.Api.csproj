@@ -5,10 +5,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
-    <PackageId>BlogDoFt.RedisToggler</PackageId>
-    <Version>0.1.0-alpha.1</Version>
-    <Authors>Francisco Thiago de Almeida</Authors>
-    <Company>BlogDoFt.com.br</Company>
     <ProjectGuid>1606da84-c325-48ff-a26f-9e71a0f4a612</ProjectGuid>
   </PropertyGroup>
 
