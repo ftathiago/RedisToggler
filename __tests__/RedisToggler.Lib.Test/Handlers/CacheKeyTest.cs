@@ -1,5 +1,6 @@
 using RedisToggler.Lib.Configurations;
 using RedisToggler.Lib.Handlers;
+using System.Globalization;
 
 namespace RedisToggler.Lib.Test.Handlers;
 
@@ -56,6 +57,42 @@ public class CacheKeyTest
 
         var value = key.Value;
 
+        value.Should().BeEquivalentTo(expectedValue);
+    }
+
+    [Fact]
+    public void Should_IncludeCurrentThreadCulture_When_StoreLanguageIsTrue()
+    {
+        // Given
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+        var keyValue = Guid.NewGuid().ToString();
+        var expectedValue =
+            $"RedisToggler.Lib.Test.Fixtures.ChildGenericClass:pt-BR:{keyValue}";
+        config.StoreLanguage = true;
+        var key = new CacheKey<ChildGenericClass>(config, keyValue);
+
+        // When
+        var value = key.Value;
+
+        // Then
+        value.Should().BeEquivalentTo(expectedValue);
+    }
+
+    [Fact]
+    public void Should_IncludePrefix_When_PrefixIsConfigured()
+    {
+        // Given
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+        var keyValue = Guid.NewGuid().ToString();
+        config.KeyPrefix = "test";
+        var expectedValue =
+            $"{config.KeyPrefix}:RedisToggler.Lib.Test.Fixtures.ChildGenericClass:{keyValue}";
+        var key = new CacheKey<ChildGenericClass>(config, keyValue);
+
+        // When
+        var value = key.Value;
+
+        // Then
         value.Should().BeEquivalentTo(expectedValue);
     }
 }

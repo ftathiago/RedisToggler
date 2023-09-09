@@ -46,13 +46,15 @@ Para isso, basta adicionar uma instância de `CacheEntryConfiguration` como Sing
 
 ```csharp
 builder.Services
-    .AddSingleton(opt =>
+    .AddSingleton(opt => new CacheEntryConfiguration()
     {
-        return new CacheEntryConfiguration();
+        StoreLanguage = true,        
     })
 ```
 
 Caso você possua mais de uma entidade sendo recuperada do cache, basta que você crie uma classe, herdando de `CacheEntryConfiguration`, e também a adicione como Singleton nas dependências da aplicação.
+
+A propriedade `StoreLanguage` informa se é necessário - ou não - adicionar as informações de cultura da Thread na chave do registro no cache.
 
 ### Como utilizar?
 
@@ -105,6 +107,8 @@ builder.Services
 ```
 
 In case that you have more then one entity being restore from cache, you must write a classe that inherits from `CacheEntryConfiguration`, and also add an instance of created class, as singleton, into IServiceCollection.
+
+The `StoreLanguage` property set if is necessary - or not - to add Culture information, present at Current Thread, to cache key.
 
 ### How to use?
 

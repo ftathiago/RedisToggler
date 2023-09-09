@@ -25,6 +25,13 @@ public class CacheEntryConfiguration
     /// </summary>
     public string? KeyPrefix { get; set; }
 
+    /// <summary>
+    /// Set if cache key should store information about
+    /// Thread Culture information
+    /// <remarks>Default: false</remarks>
+    /// </summary>
+    public bool StoreLanguage { get; set; } = false;
+
     internal TimeSpan CacheDuration =>
         TimeSpan.FromMinutes(CacheDurationInMinutes);
 

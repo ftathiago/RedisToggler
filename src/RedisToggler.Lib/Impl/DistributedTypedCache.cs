@@ -1,5 +1,6 @@
 using RedisToggler.Lib.Configurations;
 using RedisToggler.Lib.Handlers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RedisToggler.Lib.Impl;
 
@@ -11,6 +12,7 @@ namespace RedisToggler.Lib.Impl;
 /// <remarks>If all objects should be stored with the same configuration,
 /// you can use the base CacheEntryConfiguration type.</remarks>
 /// </typeparam>
+[ExcludeFromCodeCoverage]
 public sealed class DistributedTypedCache<TEntryConfig> : IDistributedTypedCache<TEntryConfig>
     where TEntryConfig : CacheEntryConfiguration
 {
