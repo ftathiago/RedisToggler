@@ -20,9 +20,19 @@ internal readonly struct CacheKey<TObject>
     /// Formated cache key
     /// </summary>
     /// <returns>Returns Cache key as string.</returns>
-    public string Value => string.IsNullOrEmpty(_cacheConfiguration.KeyPrefix)
-        ? $"{GetTypeName(typeof(TObject))}:{_key}"
-        : $"{_cacheConfiguration.KeyPrefix}:{GetTypeName(typeof(TObject))}:{_key}";
+    public string Value =>
+        $"{GetPrefix()}{GetTypeDescription()}{GetThreadCulture()}{_key}";
+
+    private string GetPrefix() => string.IsNullOrEmpty(_cacheConfiguration.KeyPrefix)
+        ? string.Empty
+        : $"{_cacheConfiguration.KeyPrefix}:";
+
+    private string GetTypeDescription() =>
+        $"{GetTypeName(typeof(TObject))}:";
+
+    private string GetThreadCulture() => _cacheConfiguration.StoreLanguage
+            ? $"{Thread.CurrentThread.CurrentCulture.Name}:"
+            : string.Empty;
 
     private StringBuilder GetTypeName(Type type, StringBuilder? sb = null)
     {
